@@ -1,0 +1,24 @@
+# --- Python ---
+.venv/
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# --- Node/Vite ---
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# --- ENV / secrets ---
+.env
+backend/.env
+frontend/.env
+
+# --- OS ---
+.DS_Store
+
+# --- Neo4j runtime (do not commit DB/logs) ---
+neo4j/data/
+neo4j/logs/
+

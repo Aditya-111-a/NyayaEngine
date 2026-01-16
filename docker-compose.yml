@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  neo4j:
+    image: neo4j:5
+    container_name: neo4j-cpa
+    ports:
+      - "7474:7474"   # Neo4j browser UI
+      - "7687:7687"   # Bolt protocol (Python connects here)
+    environment:
+      - NEO4J_AUTH=neo4j/password123
+      - NEO4J_PLUGINS=["apoc"]
+    volumes:
+      - ./neo4j/data:/data
+      - ./neo4j/logs:/logs
+

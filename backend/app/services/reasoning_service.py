@@ -1,6 +1,6 @@
 from app.db.neo4j import neo4j_db
 
-SUPPORTED_OPERATORS = {"EQ", "NEQ", "GT", "GTE", "LT", "LTE", "IN", "CONTAINS", "EXISTS"}
+SUPPORTED_OPERATORS = {"EQ", "NEQ", "GT", "GTE", "LT", "LTE", "IN", "CONTAINS", "EXISTS", "NOT_EXISTS"}
 
 
 def cast_condition_value(value, value_type: str):
@@ -44,10 +44,17 @@ def eval_condition(op: str, case_value, cond_value):
     if op == "EXISTS":
         return case_value is not None
 
+    # ✅ NEW: safe negation of EXISTS
+    if op == "NOT_EXISTS":
+        return case_value is None
+
     if op == "EQ":
         return case_value == cond_value
     if op == "NEQ":
         return case_value != cond_value
+    
+    if op == "NOT_EXISTS":
+        return case_value is None
 
     # FIX: numeric ops must not crash on strings
     if op in ["GT", "GTE", "LT", "LTE"]:
@@ -266,8 +273,8 @@ class ReasoningService:
                     "reason": fail_reason or f'{r["rule_id"]} failed for unknown reason'
                 })
 
-        fired_sorted = sorted(fired, key=lambda x: x.get("priority") or 0, reverse=True)
-        failed_sorted = sorted(failed, key=lambda x: x["priority"], reverse=True)
+        fired_sorted = sorted(fired, key=lambda x: (x.get("priority") is not None, x.get("priority") or 0), reverse=True)
+        failed_sorted = sorted(failed, key=lambda x: (x.get("priority") is not None, x.get("priority") or 0), reverse=True)
 
         final_decision = {
             "summary": None,

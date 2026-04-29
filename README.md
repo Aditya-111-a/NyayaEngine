@@ -593,7 +593,6 @@ The first system to simultaneously advance over all four categories of prior art
 |---|---|
 | **Aditya** | aditya.2022c@vitstudent.ac.in |
 | **Madayanthikaa R** | madayanthikaa.r2022@vitstudent.ac.in |
-| **Rufina M** | rufina.m2022@vitstudent.ac.in |
 
 **Institution:** School of Computer Science and Engineering (SCOPE), Vellore Institute of Technology, Vellore, Tamil Nadu, India
 

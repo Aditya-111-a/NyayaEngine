@@ -2,18 +2,16 @@
 set -e
 
 echo "Starting Neo4j (Docker)..."
-docker compose up -d
+docker compose up -d neo4j
 
-echo "Starting Ollama (if installed)..."
-# starts only if ollama exists
+echo "Checking Ollama (local)..."
 if command -v ollama >/dev/null 2>&1; then
-  # try to ping server
   if ! curl -s http://localhost:11434/api/tags >/dev/null 2>&1; then
-    echo "Ollama server not responding, starting ollama serve..."
+    echo "Starting local ollama serve..."
     nohup ollama serve >/dev/null 2>&1 &
     sleep 1
   else
-    echo "Ollama already running"
+    echo "Ollama already running locally"
   fi
 else
   echo "Ollama not installed. Auto-LLM extraction won't work."
@@ -22,7 +20,7 @@ fi
 echo "Starting backend (FastAPI)..."
 cd backend
 source .venv/bin/activate
-nohup uvicorn app.main:app --reload --port 8000 >/dev/null 2>&1 &
+nohup python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 >/dev/null 2>&1 &
 cd ..
 
 echo "Starting frontend (Vite)..."
